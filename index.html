@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Berqurban Bersama UNP Peduli</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+        :root {
+            --orange: #f37021;
+            --orange-light: #ffa56b;
+            --blue: #004aad;
+            --gray-light: #f5f5f5;
+            --gray-medium: #999999;
+            --gray-dark: #333333;
+            --bg-white: #fff;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--gray-light);
+            color: var(--gray-dark);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background-color: var(--orange);
+            padding: 20px 10px;
+            color: white;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0 0 5px 0;
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+        nav {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            border-bottom: 3px solid var(--orange-light);
+            background: var(--orange);
+        }
+        nav button {
+            background: none;
+            border: none;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 14px 20px;
+        }
+        main {
+            max-width: 900px;
+            margin: 30px auto 40px auto;
+            padding: 0 20px;
+            flex-grow: 1;
+        }
+        section {
+            background: var(--bg-white);
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(243, 112, 33, 0.15);
+            display: none; /* Initially hidden */
+        }
+        section.active {
+            display: block; /* Show active section */
+        }
+        form label {
+            display: block;
+            margin: 15px 0 6px;
+            font-weight: 600;
+        }
+        form input[type="text"],
+        form input[type="number"],
+        form select {
+            width: 100%;
+            padding: 14px 12px;
+            border: 2px solid #ddd;
+            border-radius: 7px;
+            font-size: 1rem;
+        }
+        form input[type="submit"] {
+            margin-top: 25px;
+            background-color: var(--orange);
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 18px;
+        }
+        thead {
+            background-color: var(--orange);
+            color: white;
+        }
+        tbody tr {
+            border-bottom: 1px solid #eee;
+        }
+        tbody tr:hover {
+            background-color: var(--gray-light);
+        }
+        tbody td {
+            padding: 12px 16px;
+        }
+        .message {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            border-radius: 5px;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Berqurban Bersama UNP Peduli</h1>
+    <p>Menuju Kebersamaan dan Keberkahan di Idul Adha 1447 H</p>
+</header>
+
+<nav>
+    <button type="button" data-target="pendaftar">Pendaftar</button>
+    <button type="button" data-target="input-potongan">Input Potongan Gaji</button>
+    <button type="button" data-target="laporan">Laporan Peserta</button>
+</nav>
+
+<main>
+
+    <div class="message" id="message" style="display: none;"></div>
+
+    <!-- Menu 1: Pendaftar -->
+    <section id="pendaftar" class="active">
+        <h2>Formulir Pendaftaran Peserta Qurban</h2>
+        <form id="registrationForm">
+            <label for="nip">NIP</label>
+            <input type="text" name="nip" id="nip" placeholder="Masukkan NIP" required autocomplete="off" />
+            
+            <label for="nama">Nama Lengkap Dosen/Karyawan</label>
+            <input type="text" name="nama" id="nama" placeholder="Masukkan nama lengkap" required autocomplete="off" />
+            
+            <label for="unit">Unit / Fakultas</label>
+            <input type="text" name="unit" id="unit" placeholder="Masukkan unit atau fakultas" required autocomplete="off" />
+            
+            <input type="submit" value="Daftar Sekarang" />
+        </form>
+
+        <h3 style="margin-top: 30px; color: var(--orange)">Daftar Peserta Terdaftar:</h3>
+        <table id="participantsTable">
+            <thead>
+                <tr>
+                    <th>NIP</th>
+                    <th>Nama</th>
+                    <th>Unit / Fakultas</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Participants will be added here dynamically -->
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Menu 2: Input Potongan Gaji -->
+    <section id="input-potongan">
+        <h2>Input Data Potongan Gaji per Bulan</h2>
+        <form id="deductionForm">
+            <label for="nip_potongan">Pilih Peserta (NIP - Nama)</label>
+            <select name="nip_potongan" id="nip_potongan" required>
+                <option value="" disabled selected>-- Pilih Peserta --</option>
+                <!-- Options will be populated dynamically -->
+            </select>
+
+            <label for="potongan_bulanan">Nominal Potongan Gaji per Bulan (Rp)</label>
+            <input type="number" name="potongan_bulanan" id="potongan_bulanan" placeholder="Masukkan nominal potongan" min="1" required />
+
+            <input type="submit" value="Simpan Potongan" />
+        </form>
+    </section>
+
+    <!-- Menu 3: Laporan Peserta -->
+    <section id="laporan">
+        <h2>Laporan Peserta Qurban untuk Lebaran Haji 1447 H</h2>
+        <table id="reportTable">
+            <thead>
+                <tr>
+                    <th>NIP</th>
+                    <th>Nama</th>
+                    <th>Unit / Fakultas</th>
+                    <th>Potongan Gaji per Bulan (Rp)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Report data will be added here dynamically -->
+            </tbody>
+        </table>
+    </section>
+
+</main>
+
+<script>
+    // Load participants from localStorage
+    const loadParticipants = () => {
+        const storedParticipants = localStorage.getItem('participants');
+        return storedParticipants ? JSON.parse(storedParticipants) : [];
+    };
+
+    // Save participants to localStorage
+    const saveParticipants = (participants) => {
+        localStorage.setItem('participants', JSON.stringify(participants));
+    };
+
+    let participants = loadParticipants();
+
+    const updateParticipantsTable = () => {
+        const tbody = document.querySelector('#participantsTable tbody');
+        tbody.innerHTML = '';
+        participants.forEach(p => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${p.nip}</td>
+                <td>${p.nama}</td>
+                <td>${p.unit}</td>
+                <td><button onclick="removeParticipant('${p.nip}')">Hapus</button></td>
+            `;
+            tbody.appendChild(row);
+        });
+    };
+
+    const updateDeductionOptions = () => {
+        const select = document.getElementById('nip_potongan');
+        select.innerHTML = '<option value="" disabled selected>-- Pilih Peserta --</option>';
+        participants.forEach(p => {
+            const option = document.createElement('option');
+            option.value = p.nip;
+            option.textContent = `${p.nip} - ${p.nama}`;
+            select.appendChild(option);
+        });
+    };
+
+    const updateReportTable = () => {
+        const tbody = document.querySelector('#reportTable tbody');
+        tbody.innerHTML = '';
+        participants.forEach(p => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${p.nip}</td>
+                <td>${p.nama}</td>
+                <td>${p.unit}</td>
+                <td>${p.potongan !== null ? p.potongan.toLocaleString() : '<em>Belum diinput</em>'}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    };
+
+    const showMessage = (message, isError = false) => {
+        const messageDiv = document.getElementById('message');
+        messageDiv.textContent = message;
+        messageDiv.style.display = 'block';
+        messageDiv.style.backgroundColor = isError ? '#f8d7da' : '#d4edda';
+        messageDiv.style.borderColor = isError ? '#f5c6cb' : '#c3e6cb';
+    };
+
+    const removeParticipant = (nip) => {
+        const index = participants.findIndex(p => p.nip === nip);
+        if (index !== -1) {
+            participants.splice(index, 1);
+            saveParticipants(participants);
+            updateParticipantsTable();
+            updateDeductionOptions();
+            updateReportTable();
+            showMessage("Peserta berhasil dihapus.");
+        }
+    };
+
+    document.querySelector('nav').addEventListener('click', (event) => {
+        if (event.target.tagName === 'BUTTON') {
+            const target = event.target.getAttribute('data-target');
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(target).classList.add('active');
+        }
+    });
+
+    document.getElementById('registrationForm').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const nip = document.getElementById('nip').value;
+        const nama = document.getElementById('nama').value;
+        const unit = document.getElementById('unit').value;
+
+        // Check if NIP already exists
+        if (participants.some(p => p.nip === nip)) {
+            showMessage("NIP sudah terdaftar.", true);
+            return;
+        }
+
+        // Add participant
+        participants.push({ nip, nama, unit, potongan: null });
+        saveParticipants(participants);
+        updateParticipantsTable();
+        updateDeductionOptions();
+        showMessage("Peserta berhasil didaftarkan.");
+        document.getElementById('registrationForm').reset();
+    });
+
+    document.getElementById('deductionForm').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const nipPotong = document.getElementById('nip_potongan').value;
+        const nominalPotong = parseFloat(document.getElementById('potongan_bulanan').value);
+
+        const participant = participants.find(p => p.nip === nipPotong);
+        if (participant) {
+            participant.potongan = nominalPotong;
+            saveParticipants(participants);
+            updateReportTable();
+            showMessage("Potongan gaji berhasil disimpan.");
+            document.getElementById('deductionForm').reset();
+        } else {
+            showMessage("Peserta tidak ditemukan.", true);
+        }
+    });
+
+    // Initial load
+    updateParticipantsTable();
+    updateDeductionOptions();
+    updateReportTable();
+</script>
+
+</body>
+</html>
